@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>4.2.6
+  </title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
+  <style>
+    #map {
+      height: 80vh;
+    }
+  </style>
+</head>
+<body>
+  <div id="map"></div>
+  <script>
+    // 地図インスタンスを初期化
+    const map = L.map('map', {
+      center: [35.3627808, 138.7307908], // 富士山
+      zoom: 14 // 初期zoomレベル
+    });
+    const backgroundLayer = L.tileLayer(
+      'https://cyberjapandata.gsi.go.jp/xyz/std/{z}/{x}/{y}.png', // 地理院タイル空中写真
+      {
+        maxZoom: 19,
+        attribution: '<a href="https://maps.gsi.go.jp/development/ichiran.html">地理院タイル</a>'
+      }
+    );
+    // 地図インスタンスへレイヤーを追加
+    map.addLayer(backgroundLayer);
+    // 円の描画
+    L.circle([35.3627808, 138.7307908], {
+      color: '#00ffaa',
+      fillColor: '#ff0000',
+      fillOpacity: 0.3,
+      radius: 1000
+    }).bindPopup('I am Circle').addTo(map);
+    // 線分
+    L.polyline(
+      [
+        [35.36, 138.73],
+        [35.37, 138.73],
+        [35.37, 138.74],
+        [35.38, 138.74],
+        [35.39, 138.75],
+        [35.37, 138.75],
+      ],
+      { color: 'blue' }
+    ).bindPopup('I am Polyline!').addTo(map);
+    // 多角形
+    L.polygon(
+      [
+        [35.36, 138.7307908],
+        [35.35, 138.74],
+        [35.34, 138.72]
+      ],
+      { color: 'green' }
+    ).bindPopup('I am Polygon!').addTo(map);
+  </script>
+</body>
+</html>

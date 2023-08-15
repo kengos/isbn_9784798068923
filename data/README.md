@@ -6,7 +6,7 @@
 
 [国土数値情報 - 鉄道データ](https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-N02-v3_0.html)
 
-◯ p29-13_01.geojson
+◯ p29-13_01.geojson, P29-21.geojson
 
 [国土数値情報 - 学校データ](https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-P29-v2_0.html)
 

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>4-2-9 | Maplibre GL JS</title>
+  <!-- MapLibre GL JSを読み込み -->
+  <script src='https://unpkg.com/maplibre-gl@latest/dist/maplibre-gl.js'></script>
+  <link href='https://unpkg.com/maplibre-gl@latest/dist/maplibre-gl.css' rel='stylesheet' />
+  <style>
+    #map {
+      height: 80vh;
+    }
+  </style>
+</head>
+<body>
+  <div id="map"></div>
+  <script>
+    // MapLibreインスタンスを初期化
+    const map = new maplibregl.Map({
+      container: 'map',
+      center: [136.1, 35.25],
+      zoom: 9,
+      style:  {
+        // MapLibre-Style
+        version: 8,
+        sources: {
+          // 地図上で使うデータを定義する
+          osm: {
+            type: 'raster', // ラスタータイル
+            tiles: [
+              'https://tile.openstreetmap.org/{z}/{x}/{y}.png'
+            ],
+            tileSize: 256, // タイルの解像度, デフォルトは512
+            maxzoom: 19,
+            attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          },
+          lakebiwa: {
+            type: 'image',
+            url: '../../data/lakebiwa.jpg',
+            coordinates: [
+              [135.596438368833077, 35.5498826025608185], // 左上経度・緯度
+              [136.5823028110609414, 35.5498826025608185], // 右上経度・緯度
+              [136.5823028110609414, 34.9281476305997742], // 右下経度・緯度
+              [135.596438368833077, 34.9281476305997742], // 左下経度・緯度
+            ]
+          }
+        },
+        layers: [
+          {
+            id: 'osm-layer',
+            source: 'osm',  // 使うデータをsourcesのkeyで指定する
+            type: 'raster', // データをどのように表示するか指定する
+          },
+          {
+            id: 'lakebiwa-layer',
+            source: 'lakebiwa',
+            type: 'raster',
+            paint: {
+              'raster-opacity': 0.7
+            }
+          }
+        ]
+      }
+    });
+  </script>
+</body>
+</html>

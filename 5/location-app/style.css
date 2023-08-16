@@ -30,3 +30,15 @@ body {
 #map {
   height: 100vh;
 }
+
+#opacity-control {
+  background: #fff;
+  color: #333;
+  width: initial;
+  margin: 0;
+  padding: 1em;
+}
+
+#opacity-control input {
+  pointer-events: initial;
+}

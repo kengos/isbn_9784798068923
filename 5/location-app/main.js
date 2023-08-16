@@ -1,6 +1,9 @@
-import "./style.css";
-import maplibregl from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
+import "maplibre-gl-opacity/dist/maplibre-gl-opacity.css";
+import "./style.css";
+
+import maplibregl from "maplibre-gl";
+import OpacityControl from "maplibre-gl-opacity";
 
 const map = new maplibregl.Map({
   container: "map", // div要素のid
@@ -105,7 +108,10 @@ const map = new maplibregl.Map({
         source: "hazard_flood",
         type: "raster",
         paint: {
-          "raster-opacity": 0.7,
+          "raster-opacity": 1,
+        },
+        layout: {
+          visibility: "none",
         },
       },
       {
@@ -113,7 +119,10 @@ const map = new maplibregl.Map({
         source: "hazard_hightide",
         type: "raster",
         paint: {
-          "raster-opacity": 0.7,
+          "raster-opacity": 1,
+        },
+        layout: {
+          visibility: "none",
         },
       },
       {
@@ -123,6 +132,9 @@ const map = new maplibregl.Map({
         paint: {
           "raster-opacity": 0.7,
         },
+        layout: {
+          visibility: "none",
+        },
       },
       {
         id: "hazard_doseki-layer",
@@ -130,6 +142,9 @@ const map = new maplibregl.Map({
         type: "raster",
         paint: {
           "raster-opacity": 0.7,
+        },
+        layout: {
+          visibility: "none",
         },
       },
       {
@@ -139,6 +154,9 @@ const map = new maplibregl.Map({
         paint: {
           "raster-opacity": 0.7,
         },
+        layout: {
+          visibility: "none",
+        },
       },
       {
         id: "hazard_jisuberi-layer",
@@ -147,7 +165,28 @@ const map = new maplibregl.Map({
         paint: {
           "raster-opacity": 0.7,
         },
+        layout: {
+          visibility: "none",
+        },
       },
     ],
   },
+});
+
+map.on("load", () => {
+  // 背景地図・重ねるタイル地図のコントロール
+  const opacity = new OpacityControl({
+    baseLayers: {
+      "hazard_flood-layer": "洪水浸水想定区域", // layer-id: レイヤー名
+      "hazard_hightide-layer": "高潮浸水想定区域",
+      "hazard_tsunami-layer": "津波浸水想定区域",
+      "hazard_doseki-layer": "土石流警戒区域",
+      "hazard_kyukeisha-layer": "急傾斜警戒区域",
+      "hazard_jisuberi-layer": "地滑り警戒区域",
+    },
+  });
+  map.addControl(opacity, "top-left"); // 第二引数で場所を指定できる
+  // NavigationControl
+  let nc = new maplibregl.NavigationControl();
+  map.addControl(nc, "top-left");
 });

@@ -43,3 +43,15 @@ https://www.naturalearthdata.com/downloads/10m-raster-data/10m-natural-earth-2/
   'ZOOM_MIN': 0
 }
 ```
+
+◯ fonts
+
+SIL OpenFontLicense
+
+https://github.com/maplibre/font-maker
+
+- Noto Sans Bold
+- Noto Sans CJK JP Bold
+- Noto Sans CJK JP Light
+- Noto Sans CJK JP Regular
+- Noto Sans Regular

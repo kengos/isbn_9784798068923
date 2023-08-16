@@ -1,0 +1,12 @@
+version: "3.9"
+services:
+  node:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    working_dir: /app
+    volumes:
+      - ./:/app:cached
+    tty: true
+    ports:
+      - "${LOCAL_IP:-127.0.0.1}:5173:5173"

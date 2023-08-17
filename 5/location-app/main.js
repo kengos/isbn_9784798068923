@@ -4,6 +4,9 @@ import "./style.css";
 
 import maplibregl from "maplibre-gl";
 import OpacityControl from "maplibre-gl-opacity";
+import { mouseClickEvent } from "./mouse-click";
+import { mouseMoveEvent } from "./mouse-move";
+import { trackUserLocation } from "./location";
 
 const skhbUrl = new URL("./skhb/", import.meta.url);
 
@@ -34,6 +37,14 @@ const map = new maplibregl.Map({
         maxzoom: 8,
         attribution:
           '<a href="https://www.gsi.go.jp/bousaichiri/hinanbasho.html" target="_blank">国土地理院:指定緊急避難場所データ</a>',
+      },
+      route: {
+        // 現在位置と最寄りの避難施設をつなぐライン
+        type: "geojson",
+        data: {
+          type: "FeatureCollection",
+          features: [],
+        },
       },
       hazard_flood: {
         // 洪水浸水想定区域
@@ -113,6 +124,16 @@ const map = new maplibregl.Map({
         id: "osm-layer",
         source: "osm",
         type: "raster",
+      },
+      {
+        // 現在位置と最寄り施設のライン
+        id: "route-layer",
+        source: "route",
+        type: "line",
+        paint: {
+          "line-color": "#33aaff",
+          "line-width": 4,
+        },
       },
       {
         id: "skhb-1-layer",
@@ -397,58 +418,8 @@ map.on("load", () => {
   let nc = new maplibregl.NavigationControl();
   map.addControl(nc, "top-left");
 
-  map.on("click", (e) => {
-    const features = map.queryRenderedFeatures(e.point, {
-      layers: [
-        "skhb-1-layer",
-        "skhb-2-layer",
-        "skhb-3-layer",
-        "skhb-4-layer",
-        "skhb-5-layer",
-        "skhb-6-layer",
-        "skhb-7-layer",
-        "skhb-8-layer",
-      ],
-    });
-    if (features.length === 0) return; // 地物がなければ処理を終了
+  map.on("click", (e) => mouseClickEvent(e, map));
+  map.on("mousemove", (e) => mouseMoveEvent(e, map));
 
-    const feature = features[0];
-    const popup = new maplibregl.Popup()
-      .setLngLat(feature.geometry.coordinates) // [lon, lat]
-      .setHTML(
-        `\
-        <div style="font-weight:900;font-size:1rem;">${
-          feature.properties.name
-        }</div>\
-        <div>${feature.properties.address}</div>\
-        <div>${feature.properties.remarks ?? ""}</div>\
-        <div>\
-          <span ${
-            feature.properties.disaster1 ? "" : ' style="color:#ccc;"'
-          }>洪水</span>\
-          <span ${
-            feature.properties.disaster2 ? "" : ' style="color:#ccc;"'
-          }>崖崩れ/土石流/地滑り</span>\
-          <span ${
-            feature.properties.disaster3 ? "" : ' style="color:#ccc;"'
-          }>高潮</span>\
-          <span ${
-            feature.properties.disaster4 ? "" : ' style="color:#ccc;"'
-          }>地震</span>\
-          <span ${
-            feature.properties.disaster5 ? "" : ' style="color:#ccc;"'
-          }>津波</span>\
-          <span ${
-            feature.properties.disaster6 ? "" : ' style="color:#ccc;"'
-          }>大規模な火事</span>\
-          <span ${
-            feature.properties.disaster7 ? "" : ' style="color:#ccc;"'
-          }>内水氾濫</span>\
-          <span ${
-            feature.properties.disaster8 ? "" : ' style="color:#ccc;"'
-          }>火山現象</span>\
-        </div>`
-      )
-      .addTo(map);
-  });
+  trackUserLocation(map);
 });

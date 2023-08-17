@@ -115,7 +115,7 @@ const map = new maplibregl.Map({
         type: "raster",
       },
       {
-        id: "skhb-layer",
+        id: "skhb-1-layer",
         source: "skhb",
         "source-layer": "skhb",
         type: "circle",
@@ -135,6 +135,167 @@ const map = new maplibregl.Map({
           "circle-stroke-color": "#ffffff",
         },
         filter: ["get", "disaster1"],
+        layout: { visibility: "none" },
+      },
+      {
+        id: "skhb-2-layer",
+        source: "skhb",
+        "source-layer": "skhb",
+        type: "circle",
+        paint: {
+          "circle-color": "#6666cc",
+          "circle-radius": [
+            // ズームレベルに応じた円の大きさ
+            "interpolate",
+            ["linear"],
+            ["zoom"],
+            5,
+            2,
+            14,
+            6,
+          ],
+          "circle-stroke-width": 1,
+          "circle-stroke-color": "#ffffff",
+        },
+        filter: ["get", "disaster2"],
+        layout: { visibility: "none" },
+      },
+      {
+        id: "skhb-3-layer",
+        source: "skhb",
+        "source-layer": "skhb",
+        type: "circle",
+        paint: {
+          "circle-color": "#6666cc",
+          "circle-radius": [
+            // ズームレベルに応じた円の大きさ
+            "interpolate",
+            ["linear"],
+            ["zoom"],
+            5,
+            2,
+            14,
+            6,
+          ],
+          "circle-stroke-width": 1,
+          "circle-stroke-color": "#ffffff",
+        },
+        filter: ["get", "disaster3"],
+        layout: { visibility: "none" },
+      },
+      {
+        id: "skhb-4-layer",
+        source: "skhb",
+        "source-layer": "skhb",
+        type: "circle",
+        paint: {
+          "circle-color": "#6666cc",
+          "circle-radius": [
+            // ズームレベルに応じた円の大きさ
+            "interpolate",
+            ["linear"],
+            ["zoom"],
+            5,
+            2,
+            14,
+            6,
+          ],
+          "circle-stroke-width": 1,
+          "circle-stroke-color": "#ffffff",
+        },
+        filter: ["get", "disaster4"],
+        layout: { visibility: "none" },
+      },
+      {
+        id: "skhb-5-layer",
+        source: "skhb",
+        "source-layer": "skhb",
+        type: "circle",
+        paint: {
+          "circle-color": "#6666cc",
+          "circle-radius": [
+            // ズームレベルに応じた円の大きさ
+            "interpolate",
+            ["linear"],
+            ["zoom"],
+            5,
+            2,
+            14,
+            6,
+          ],
+          "circle-stroke-width": 1,
+          "circle-stroke-color": "#ffffff",
+        },
+        filter: ["get", "disaster5"],
+      },
+      {
+        id: "skhb-6-layer",
+        source: "skhb",
+        "source-layer": "skhb",
+        type: "circle",
+        paint: {
+          "circle-color": "#6666cc",
+          "circle-radius": [
+            // ズームレベルに応じた円の大きさ
+            "interpolate",
+            ["linear"],
+            ["zoom"],
+            5,
+            2,
+            14,
+            6,
+          ],
+          "circle-stroke-width": 1,
+          "circle-stroke-color": "#ffffff",
+        },
+        filter: ["get", "disaster6"],
+        layout: { visibility: "none" },
+      },
+      {
+        id: "skhb-7-layer",
+        source: "skhb",
+        "source-layer": "skhb",
+        type: "circle",
+        paint: {
+          "circle-color": "#6666cc",
+          "circle-radius": [
+            // ズームレベルに応じた円の大きさ
+            "interpolate",
+            ["linear"],
+            ["zoom"],
+            5,
+            2,
+            14,
+            6,
+          ],
+          "circle-stroke-width": 1,
+          "circle-stroke-color": "#ffffff",
+        },
+        filter: ["get", "disaster7"],
+        layout: { visibility: "none" },
+      },
+      {
+        id: "skhb-8-layer",
+        source: "skhb",
+        "source-layer": "skhb",
+        type: "circle",
+        paint: {
+          "circle-color": "#6666cc",
+          "circle-radius": [
+            // ズームレベルに応じた円の大きさ
+            "interpolate",
+            ["linear"],
+            ["zoom"],
+            5,
+            2,
+            14,
+            6,
+          ],
+          "circle-stroke-width": 1,
+          "circle-stroke-color": "#ffffff",
+        },
+        filter: ["get", "disaster8"],
+        layout: { visibility: "none" },
       },
       {
         id: "hazard_flood-layer",
@@ -219,7 +380,75 @@ map.on("load", () => {
     },
   });
   map.addControl(opacity, "top-left"); // 第二引数で場所を指定できる
+  const opacitySkhb = new OpacityControl({
+    baseLayers: {
+      "skhb-1-layer": "洪水",
+      "skhb-2-layer": "崖崩れ/土石流/地滑り",
+      "skhb-3-layer": "高潮",
+      "skhb-4-layer": "地震",
+      "skhb-5-layer": "津波",
+      "skhb-6-layer": "大規模な火事",
+      "skhb-7-layer": "内水氾濫",
+      "skhb-8-layer": "火山現象",
+    },
+  });
+  map.addControl(opacitySkhb, "top-right"); // 第二引数で場所を指定できる
   // NavigationControl
   let nc = new maplibregl.NavigationControl();
   map.addControl(nc, "top-left");
+
+  map.on("click", (e) => {
+    const features = map.queryRenderedFeatures(e.point, {
+      layers: [
+        "skhb-1-layer",
+        "skhb-2-layer",
+        "skhb-3-layer",
+        "skhb-4-layer",
+        "skhb-5-layer",
+        "skhb-6-layer",
+        "skhb-7-layer",
+        "skhb-8-layer",
+      ],
+    });
+    if (features.length === 0) return; // 地物がなければ処理を終了
+
+    const feature = features[0];
+    const popup = new maplibregl.Popup()
+      .setLngLat(feature.geometry.coordinates) // [lon, lat]
+      .setHTML(
+        `\
+        <div style="font-weight:900;font-size:1rem;">${
+          feature.properties.name
+        }</div>\
+        <div>${feature.properties.address}</div>\
+        <div>${feature.properties.remarks ?? ""}</div>\
+        <div>\
+          <span ${
+            feature.properties.disaster1 ? "" : ' style="color:#ccc;"'
+          }>洪水</span>\
+          <span ${
+            feature.properties.disaster2 ? "" : ' style="color:#ccc;"'
+          }>崖崩れ/土石流/地滑り</span>\
+          <span ${
+            feature.properties.disaster3 ? "" : ' style="color:#ccc;"'
+          }>高潮</span>\
+          <span ${
+            feature.properties.disaster4 ? "" : ' style="color:#ccc;"'
+          }>地震</span>\
+          <span ${
+            feature.properties.disaster5 ? "" : ' style="color:#ccc;"'
+          }>津波</span>\
+          <span ${
+            feature.properties.disaster6 ? "" : ' style="color:#ccc;"'
+          }>大規模な火事</span>\
+          <span ${
+            feature.properties.disaster7 ? "" : ' style="color:#ccc;"'
+          }>内水氾濫</span>\
+          <span ${
+            feature.properties.disaster8 ? "" : ' style="color:#ccc;"'
+          }>火山現象</span>\
+        </div>`
+      )
+      .addTo(map);
+  });
 });

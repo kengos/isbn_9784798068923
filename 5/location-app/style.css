@@ -29,6 +29,7 @@ body {
 
 #map {
   height: 100vh;
+  color: #333;
 }
 
 #opacity-control {
@@ -41,4 +42,9 @@ body {
 
 #opacity-control input {
   pointer-events: initial;
+}
+
+.maplibregl-popup-close-button {
+  color: #333;
+  font-size: 2rem;
 }

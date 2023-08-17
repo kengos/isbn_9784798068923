@@ -1,0 +1,18 @@
+このフォルダのファイルは以下を元に生成されています。
+
+https://www.gsi.go.jp/bousaichiri/hinanbasho.html
+[指定緊急避難場所の全国データ（公開している市区町村すべて）ZIP形式3.40MB](https://www.gsi.go.jp/common/000251269.zip)
+
+以下のような加工を施しています。
+
+(1) ダウンロードしたCSVの項目名を変更
+(2) QGISで取り込み後、GEOJSON形式に変換
+(3) 生成されたGEOJSONをjqを用いてフォーマット
+(4) tippecanoe を用いてベクトルタイル形式へ変換
+
+tippecanoeは以下コマンドで生成しています。
+※ tippeacanoe/data以下に(3)で生成したファイルを配置し、docker上で生成
+
+```
+tippecanoe -e skhb -l skhb -Z5 -z8 -pf -pk -pC -P data/skhb.geojson
+```

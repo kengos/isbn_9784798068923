@@ -134,6 +134,7 @@ const map = new maplibregl.Map({
           "circle-stroke-width": 1,
           "circle-stroke-color": "#ffffff",
         },
+        filter: ["get", "disaster1"],
       },
       {
         id: "hazard_flood-layer",

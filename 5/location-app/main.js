@@ -5,6 +5,8 @@ import "./style.css";
 import maplibregl from "maplibre-gl";
 import OpacityControl from "maplibre-gl-opacity";
 
+const skhbUrl = new URL("./skhb/", import.meta.url);
+
 const map = new maplibregl.Map({
   container: "map", // div要素のid
   zoom: 5, // 初期ズーム
@@ -23,6 +25,15 @@ const map = new maplibregl.Map({
         tileSize: 256,
         attribution:
           '&copy; <a href="http://openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+      },
+      skhb: {
+        // 指定緊急避難場所ベクトルタイル
+        type: "vector",
+        tiles: [`${skhbUrl.href}/{z}/{x}/{y}.pbf`],
+        minzoom: 5,
+        maxzoom: 8,
+        attribution:
+          '<a href="https://www.gsi.go.jp/bousaichiri/hinanbasho.html" target="_blank">国土地理院:指定緊急避難場所データ</a>',
       },
       hazard_flood: {
         // 洪水浸水想定区域
@@ -104,11 +115,32 @@ const map = new maplibregl.Map({
         type: "raster",
       },
       {
+        id: "skhb-layer",
+        source: "skhb",
+        "source-layer": "skhb",
+        type: "circle",
+        paint: {
+          "circle-color": "#6666cc",
+          "circle-radius": [
+            // ズームレベルに応じた円の大きさ
+            "interpolate",
+            ["linear"],
+            ["zoom"],
+            5,
+            2,
+            14,
+            6,
+          ],
+          "circle-stroke-width": 1,
+          "circle-stroke-color": "#ffffff",
+        },
+      },
+      {
         id: "hazard_flood-layer",
         source: "hazard_flood",
         type: "raster",
         paint: {
-          "raster-opacity": 1,
+          "raster-opacity": 0.7,
         },
         layout: {
           visibility: "none",
@@ -119,7 +151,7 @@ const map = new maplibregl.Map({
         source: "hazard_hightide",
         type: "raster",
         paint: {
-          "raster-opacity": 1,
+          "raster-opacity": 0.7,
         },
         layout: {
           visibility: "none",
